@@ -1,6 +1,4 @@
 # Comparison of parametric and non-parametric models in predicting churn
-### John Herr
-### Joe Tustin
 ### Carly Wolfbrandt
 
 ## Table of Contents
