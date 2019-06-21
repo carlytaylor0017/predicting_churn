@@ -1,19 +1,20 @@
 # Comparison of parametric and non-parametric models in predicting churn
-## John Herr
-## Joe Tustin
-## Carly Wolfbrandt
+### John Herr
+### Joe Tustin
+### Carly Wolfbrandt
 
-### Table of Contents
+## Table of Contents
 1. [Objective](#objective)
 2. [Exploratory Data Analysis](#eda)
-    1. [Dataset](#dataset) 
+    1. [Dataset](#dataset)
     2. [Data Cleaning](#cleaning)
     3. [Feature Engineering](#engineering)
 3. [Modelling](#model)
-    1. [Model Pipeline](#pipeline)
-    2. [Model Scoring](#scoring)
-    3. [Random Forest](#rf)
-    4. [Linear Regression](#lm)
+    1. [Non-Parametric](#non)
+        1. [XGboost](#boost)
+        2. [Random Forest](#rf)
+    2. [Parametric](#par)
+4. [Insights](#insight)
 
 ## Objective <a name="objective"></a>
 
@@ -28,22 +29,22 @@ A ride-sharing company (Company X) is interested in predicting rider retention. 
 Here is a detailed description of the data:
 
 ***CATEGORICAL***
-- `city`: city this user signed up in 
+- `city`: city this user signed up in
 - `phone`: primary device for this user
 
 ***NUMERICAL***
 - `signup_date`: date of account registration; in the form `YYYYMMDD`
 - `last_trip_date`: the last time this user completed a trip; in the form `YYYYMMDD`
 - `avg_dist`: the average distance (in miles) per trip taken in the first 30 days after signup
-- `avg_rating_by_driver`: the rider’s average rating by their drivers over all of their trips 
-- `avg_rating_of_driver`: the rider’s average rating of their drivers over all of their trips 
-- `surge_pct`: the percent of trips taken with surge multiplier > 1 
-- `avg_surge`: The average surge multiplier over all of this user’s trips 
-- `trips_in_first_30_days`: the number of trips this user took in the first 30 days after signing up 
+- `avg_rating_by_driver`: the rider’s average rating by their drivers over all of their trips
+- `avg_rating_of_driver`: the rider’s average rating of their drivers over all of their trips
+- `surge_pct`: the percent of trips taken with surge multiplier > 1
+- `avg_surge`: The average surge multiplier over all of this user’s trips
+- `trips_in_first_30_days`: the number of trips this user took in the first 30 days after signing up
 - `weekday_pct`: the percent of the user’s trips occurring during a weekday
-- `luxury_car_user`: TRUE if the user took a luxury car in their first 30 days; FALSE otherwise 
+- `luxury_car_user`: TRUE if the user took a luxury car in their first 30 days; FALSE otherwise
 
-**Table 1**: Initial dataset 
+**Table 1**: Initial dataset
 
 |    |   avg_dist |   avg_rating_by_driver |   avg_rating_of_driver |   avg_surge | city           | last_trip_date      | phone   | signup_date         |   surge_pct |   trips_in_first_30_days | luxury_car_user   |   weekday_pct |
 |---:|-----------:|-----------------------:|-----------------------:|------------:|:---------------|:--------------------|:--------|:--------------------|------------:|-------------------------:|:------------------|--------------:|
@@ -57,9 +58,9 @@ Here is a detailed description of the data:
 
 Table 2 shows the data types and number of null values for each column.
 
-**Table 2**: Initial data type and null value descriptions 
+**Table 2**: Initial data type and null value descriptions
 
- |   column name |   information | 
+ |   column name |   information |
  |---:|-----------:|
 |avg_dist  |                50000 non-null float64 |
 |avg_rating_by_driver   |   49799 non-null float64|
@@ -76,18 +77,18 @@ Table 2 shows the data types and number of null values for each column.
 
 There are 3 columns with null values, `avg_rating_by_driver`, `avg_rating_of_driver` and `phone`. These will need to be dealt with alongisde the incorrectly typed `signup_date` and `last_trip_date` columns.  Furthermore, the 2 categorical values, `city` and `phone` need to be converted to dummy variables.
 
-Figure 1 shows the correlation matrix for the features. 
+Figure 1 shows the correlation matrix for the features.
 
 ![](images/correlation_matrix.png)
 
 **Figure 1**: Correlation matrix for the features in the dataset
 
-The only features that seem strongly correlated are `surge_pct` and `avg_surge`. We decided to drop `avg_surge` since the `surge_pct` represents the percent of trips taken with surge multiplier > 1, which would be more indicative of someone who is paying more (and thus probably unhappy) than the `avg_surge` which is the average surge multiplier over all of the user’s trips.
+The only features that seem strongly correlated are `surge_pct` and `avg_surge`, therefore no features needed to be dropped.
 
 
-**Table 3**: Cleaned data type and null value descriptions 
+**Table 3**: Cleaned data type and null value descriptions
 
- |   column name |   information | 
+ |   column name |   information |
  |---:|-----------:|
 |avg_dist                |  50000 non-null float64|
 |avg_rating_by_driver    |  50000 non-null float64|
@@ -122,27 +123,62 @@ There was still no target value for modeling, since there was no feature corresp
 |  3 |       2.36 |                    4.9 |                    4.6 |        1.14 | 2014-06-29 00:00:00 | 2014-01-10 00:00:00 |        20   |                        9 | True              |          80   |                     1 |                 0 |               0 |              1 |                      2 | False   |                   172 |
 |  4 |       3.13 |                    4.9 |                    4.4 |        1.19 | 2014-03-15 00:00:00 | 2014-01-27 00:00:00 |        11.8 |                       14 | False             |          82.4 |                     0 |                 1 |               1 |              0 |                    108 | True    |                   155 |
 
-![](images/pairplot.png)
 
-**Figure 1**: Pairplot for the features in the dataset
+## Modelling <a name="model"></a>
 
+One parametric (logistic regression) and two non-parametric (XGboost and Random Forest) models were trained and compared.
 
-**Table 3**: Cleaned data type and null value descriptions 
+### Non-Parametric <a name="non"></a>
 
-| feature | importance|
-|:-----------------------|-----------:|
-| phone_Android          |  0.106989  |
-| avg_dist               |  0.0995247 |
-| avg_rating_by_driver   |  0.0379053 |
-| avg_rating_of_driver   |  0.0144364 |
-| avg_surge              |  0.0143644 |
-| weekday_pct            |  0.0113378 |
-| days_since_customer    | -0.0292387 |
-| surge_pct              | -0.0330836 |
-| city_Winterfell        | -0.127842  |
-| phone_iPhone           | -0.145512  |
-| luxury_car_user        | -0.211977  |
-| trips_in_first_30_days | -0.224234  |
-| city_King's Landing    | -0.34943   |
+Algorithms that do not make strong assumptions about the form of the mapping function are called nonparametric machine learning algorithms. By not making assumptions, they are free to learn any functional form from the training data.
 
+#### XGBoost <a name="boost"></a>
+
+![](images/feature_importance_grad_boost.png)
+
+**Figure 3**: Feature importances for the XGboost model
+
+Test Accuracy for XGBoost model: 78.8%
+
+Hyper Parameters:
+ - max_depth=2
+ - learning_rate=0.05
+ - n_estimators=2000
+ - subsample = .4
+
+#### Random Forest <a name="rf"></a>
+
+![](images/random_forest_importances.png)
+
+**Figure 4**: Feature importances for the random forest model
+
+Test Accuracy for Random Forest Model : 77.4%
+
+Hyper Parameters:
+ - n_estimators=200
+ - max_depth=10
+
+### Parametric <a name="par"></a>
+
+Assumptions can greatly simplify the learning process, but can also limit what can be learned. Algorithms that simplify the function to a known form are called parametric machine learning algorithms.
+
+#### Logistic Regression <a name="rf"></a>
+
+![](images/logit_features2.png)
+
+Test Accuracy for Random Forest Model : 70.8%
+
+## Insights <a name="insights"></a>
+
+`King's Landing`and `avg_rating_by_driver` both show up as high importance features in all 3 models.
+
+For interpretability, the logistic model feature graph is interesting as it shows which features are driving the target to no churn (negative coefficients) and which features are leading to churn (positive coefficients).  It looks like Android users and people who receive ratings from drivers are the churners.
+
+![](images/rating_by_driver.png)
+
+![](images/rating_of_driver.png)
+
+![](images/distance.png)
+
+![](images/surge_pct.png)
 
