@@ -164,19 +164,38 @@ Assumptions can greatly simplify the learning process, but can also limit what c
 
 ![](images/logit_features2.png)
 
+**Figure 5**: Normalized coefficients for the logistic regression model
+
+
 Test Accuracy for Random Forest Model : 70.8%
 
-## Insights <a name="insights"></a>
+## Insights <a name="insight"></a>
 
 `King's Landing`and `avg_rating_by_driver` both show up as high importance features in all 3 models.
 
 For interpretability, the logistic model feature graph is interesting as it shows which features are driving the target to no churn (negative coefficients) and which features are leading to churn (positive coefficients).  It looks like Android users and people who receive ratings from drivers are the churners.
 
+Finally, partial dependency plots shows how changes in each feature affect the probability of churning.
+
 ![](images/rating_by_driver.png)
+
+**Figure 6**: Partial dependency plot showing relationship between churn likelihood (y = 1 = highest probability of churning) and the customer's average rating by drivers
+
 
 ![](images/rating_of_driver.png)
 
+**Figure 7**: Partial dependency plot showing relationship between churn likelihood (y = 1 = highest probability of churning) and the customer's average rating of drivers
+
+
 ![](images/distance.png)
 
+**Figure 8**: Partial dependency plot showing relationship between churn likelihood (y = 1 = highest probability of churning) and the distance traveled
+
+
+
 ![](images/surge_pct.png)
+
+**Figure 9**: Partial dependency plot showing relationship between churn likelihood (1 = highest probability of churning) and the percent of rides where the customer was paying surge pricing.
+
+
 
