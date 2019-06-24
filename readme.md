@@ -167,7 +167,7 @@ Assumptions can greatly simplify the learning process, but can also limit what c
 **Figure 5**: Normalized coefficients for the logistic regression model
 
 
-Test Accuracy for Random Forest Model : 70.8%
+Test Accuracy for Logistic Regression Model : 70.8%
 
 ## Insights <a name="insight"></a>
 
