@@ -173,7 +173,7 @@ Test Accuracy for Random Forest Model : 70.8%
 
 `King's Landing`and `avg_rating_by_driver` both show up as high importance features in all 3 models. The feature importances from Figures 3 and 4 are lacking directionality, i.e. they don't show whether a feature is important in predicting if a user churned.
 
-For interpretability, Figure 5 (the logistic model normalized coefficients) is interesting, as the coefficients show which features are driving the target to not churn (negative coefficients), and which features are leading to churn (positive coefficients).
+For interpretability, Figure 5 (the logistic model normalized coefficients) is interesting, as the coefficients show which features are driving the target to not churn (negative coefficients), and which features are leading to churn (positive coefficients). For example, being a luxury car user is a strong predictor that someone is not going to churn. This follows our initial intuition that luxury car riders are going to be less price-sensitive and happier with their experiences overall. Conversely, being an android vs. iPhone user is a high predictor of churn. There could be demographic differences between iPhone and Android users, or the company could be spending more money on OS developers than Android developers, so much that user experience is suffering.
 
 Finally, partial dependency plots from the XGboost model show how changes in each feature affect the probability of churning. Figure 6 shows that, as a customer's average rating increases, then their likelihood of churning decreases. This is in line with intuition, as customers who are visibly unhappy, perhaps to the point of being reprimanded by their drivers and receiving a bad review, are more likely to churn.
 
