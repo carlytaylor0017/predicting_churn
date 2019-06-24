@@ -171,27 +171,29 @@ Test Accuracy for Random Forest Model : 70.8%
 
 ## Insights <a name="insight"></a>
 
-`King's Landing`and `avg_rating_by_driver` both show up as high importance features in all 3 models.
+`King's Landing`and `avg_rating_by_driver` both show up as high importance features in all 3 models. The feature importances from Figures 3 and 4 are lacking directionality, i.e. they don't show whether a feature is important in predicting if a user churned.
 
-For interpretability, the logistic model feature graph is interesting as it shows which features are driving the target to no churn (negative coefficients) and which features are leading to churn (positive coefficients).  It looks like Android users and people who receive ratings from drivers are the churners.
+For interpretability, Figure 5 (the logistic model normalized coefficients) is interesting, as the coefficients show which features are driving the target to not churn (negative coefficients), and which features are leading to churn (positive coefficients).
 
-Finally, partial dependency plots shows how changes in each feature affect the probability of churning.
+Finally, partial dependency plots from the XGboost model show how changes in each feature affect the probability of churning. Figure 6 shows that, as a customer's average rating increases, then their likelihood of churning decreases. This is in line with intuition, as customers who are visibly unhappy, perhaps to the point of being reprimanded by their drivers and receiving a bad review, are more likely to churn.
 
 ![](images/rating_by_driver.png)
 
 **Figure 6**: Partial dependency plot showing relationship between churn likelihood (y) and the customer's average rating by drivers (x)
 
+Figure 7 shows a similar trend to Figure 6, wherein as the customer's average rating of their drivers increases, their likelihood of churn decreases. Intuitively this makes sense, as customers who are having bad experiences with their drivers for whatever reason are less likely to continue using the service. However, it is worth noting that the slope of this line is far flatter than the slope of Figure 5. This could be related to the business model of car-sharing, where drivers who receive more than one negative review are removed from the application. Since drivers are penalized far more heavily than customers for getting bad reviews, the impotus is on drivers to give great service and get higher reviews. Therefore, there is probably less of a difference in customer service between drivers getting 4 stars vs. 5 stars.
 
 ![](images/rating_of_driver.png)
 
 **Figure 7**: Partial dependency plot showing relationship between churn likelihood (y) and the customer's average rating of drivers (x)
 
+Figure 8 shows that users who only use the service to go short distances, as well as users who use it to travel very far have the highest probability of churning. The reasons for this could be a perception of value problem, wherein both very short rides and abnormally long rides could be perceived as too expensive. Users who are consistently traveling very far probably need alternative transportation methods, since the price adds up quickly. Similarly, users who are consistently traveling very short distances are probably more likely to find a cheaper method of transportation, like walking or riding a bike, to avoid the cost.
 
 ![](images/distance.png)
 
 **Figure 8**: Partial dependency plot showing relationship between churn likelihood (y) and the distance traveled (x)
 
-
+Figure 9 shows that as the percent of trips taken while paying surge premiums increases, the likelihood of churning increases. This is also a perception of value problem, where customers who pay extra for the service due to demand spikes, don't see the perceived value in the service and are more likely to discontinue use.
 
 ![](images/surge_pct.png)
 
