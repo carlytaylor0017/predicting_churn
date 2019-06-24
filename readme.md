@@ -179,23 +179,23 @@ Finally, partial dependency plots shows how changes in each feature affect the p
 
 ![](images/rating_by_driver.png)
 
-**Figure 6**: Partial dependency plot showing relationship between churn likelihood (y = 1 = highest probability of churning) and the customer's average rating by drivers
+**Figure 6**: Partial dependency plot showing relationship between churn likelihood (y) and the customer's average rating by drivers (x)
 
 
 ![](images/rating_of_driver.png)
 
-**Figure 7**: Partial dependency plot showing relationship between churn likelihood (y = 1 = highest probability of churning) and the customer's average rating of drivers
+**Figure 7**: Partial dependency plot showing relationship between churn likelihood (y) and the customer's average rating of drivers (x)
 
 
 ![](images/distance.png)
 
-**Figure 8**: Partial dependency plot showing relationship between churn likelihood (y = 1 = highest probability of churning) and the distance traveled
+**Figure 8**: Partial dependency plot showing relationship between churn likelihood (y) and the distance traveled (x)
 
 
 
 ![](images/surge_pct.png)
 
-**Figure 9**: Partial dependency plot showing relationship between churn likelihood (1 = highest probability of churning) and the percent of rides where the customer was paying surge pricing.
+**Figure 9**: Partial dependency plot showing relationship between churn likelihood (y) and the percent of rides where the customer was paying surge pricing (x)
 
 
 
