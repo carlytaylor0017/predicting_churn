@@ -1,6 +1,3 @@
-# Comparison of parametric and non-parametric models in predicting churn
-### Carly Wolfbrandt
-
 ## Table of Contents
 1. [Objective](#objective)
 2. [Exploratory Data Analysis](#eda)
