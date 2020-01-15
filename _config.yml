@@ -1,5 +1,5 @@
 theme: jekyll-theme-minimal
-title: Predicting User Churn
+title: <a href="https://github.com/cwolfbrandt/predicting_churn">Predicting User Churn</a> # your name (or website title) here
 description: > # your text below (remove <br> elements if you don't need line breaks)
   Comparison of Parametric and Non-Parametric Models
   <br>
