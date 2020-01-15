@@ -1,4 +1,4 @@
-theme: jekyll-theme-slate
+theme: jekyll-theme-minimal
 title:  Predicting User Churn
 description: [Comparison of Parametric and Non-Parametric Models]
 linkedin: carly-wolfbrandt
